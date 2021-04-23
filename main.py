@@ -45,8 +45,7 @@ while running:
     # Cycles through all events occuring
     for event in pygame.event.get():
         if event.type == inc_speed:
-            E1.speed += 2
-            print("Vel. final do inimigo: ", E1.speed)
+            E1.incremento_velocidade(2)
 
         if event.type == QUIT:
             running = False
@@ -59,16 +58,16 @@ while running:
                 all_sprites.add(B1)
 
     # Moves and redraw all sprites
+    # Usando polimorfismo com os metodos desenhar() e mover()
     for entity in all_sprites:
-        displaySurf.blit(entity.surf, entity.rect)
-        entity.move()
+        entity.desenhar(displaySurf)
+        entity.mover()
 
     # Collision between enemies and bullets
     hits = pygame.sprite.spritecollide(E1, bullets, True)
     if hits:
         B1.kill()
         E1.shooted()
-        print(hits)
 
     # To be Run if collision occurs between Player and Enemies
     if pygame.sprite.spritecollideany(P1, enemies):

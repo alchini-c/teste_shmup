@@ -1,34 +1,48 @@
 import pygame
 import random
+from objeto_teste import Objeto
 
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(pygame.sprite.Sprite, Objeto):
     def __init__(self, displaySurf):
         super().__init__()
-        self.screen_width = displaySurf.get_width()
-        self.screen_height = displaySurf.get_height()
+        self.__largura_tela = displaySurf.get_width()
+        self.__altura_tela = displaySurf.get_height()
+        self.__tamanho_x = 50
+        self.__tamanho_y = 90
+        self.__posicao_x = random.randint(30, self.__largura_tela - 50)
+        self.__posicao_y = 0
         #self.image = pygame.image.load("Materials/Enemy.png")
-        self.surf = pygame.Surface((50, 90))
+        self.surf = pygame.Surface((self.__tamanho_x, self.__tamanho_y))
         self.surf.fill("red")
-        self.rect = self.surf.get_rect(center=((random.randint(30, self.screen_width - 50), 0)))
-        self.speed = 2
-        self.life = 3
+        self.rect = self.surf.get_rect(center=(self.__tamanho_x, self.__posicao_y))
+        self.__velocidade = 2
+        self.__vida = 3
+
+    @property
+    def velocidade(self):
+        return self.__velocidade
+
+    def incremento_velocidade(self, incremento):
+        self.__velocidade += incremento
 
     def shooted(self):
-        print("shooted")
-        self.life -= 1
-        if self.life == 0:
-            self.life = 3
+        self.__vida -= 1
+        if self.__vida == 0:
+            self.__vida = 3
             self.rect.top = 0
             self.rect.center = (random.randint(30, 350), 0)
             print("kill")
 
-    def move(self):
-        self.rect.move_ip(0, self.speed)
-        if self.rect.bottom > self.screen_height:
+    def mover(self):
+        self.rect.move_ip(0, self.__velocidade)
+        if self.rect.bottom > self.__altura_tela:
             self.rect.top = 0
             self.rect.center = (random.randint(30, 350), 0)
 
-    #def draw(self, surface):
-    #   surface.blit(self.surf, self.rect) #surface do jogo (surface do retangulo, retangulo)
+    def desenhar(self, surface):
+        surface.blit(self.surf, self.rect)
     #   surface.blit(self.image, self.rect)
+
+    def colisao(self):
+        pass
